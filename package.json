@@ -1,0 +1,16 @@
+{
+  "name": "express-postgre-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines" : {
+    "npm" : ">=10.2.4",
+    "node" : ">=20.11.0"
+  }
+}
