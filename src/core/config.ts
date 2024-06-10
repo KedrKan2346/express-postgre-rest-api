@@ -19,6 +19,7 @@ export interface ServiceConfiguration {
   dbUserPassword: string;
   apiVersion: string;
   apiServerPort: string;
+  serviceName: string;
 }
 
 export function getServiceConfiguration(): ServiceConfiguration {
@@ -29,5 +30,6 @@ export function getServiceConfiguration(): ServiceConfiguration {
     dbName: getEnvValueOrThrow('DB_NAME'),
     dbUserName: getEnvValueOrThrow('DB_USER_NAME'),
     dbUserPassword: getEnvValueOrThrow('DB_USER_PASSWORD'),
+    serviceName: getEnvValueOrThrow('SERVICE_NAME'),
   };
 }

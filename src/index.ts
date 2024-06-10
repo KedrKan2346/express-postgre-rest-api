@@ -1,23 +1,58 @@
-function run() {
-  console.log('Executed index file:');
-  console.log(
-    `db name: [${process.env.DB_NAME}]; db user: [${process.env.DB_USER_NAME}]; db name: [${process.env.DB_USER_PASSWORD}];`
-  );
-}
+import { createServer } from './server';
+import { createLogger } from '@core/logger';
+import { getServiceConfiguration } from '@core/config';
 
-run();
+const config = getServiceConfiguration();
+const serviceName = config.serviceName;
+const serviceLogger = createLogger(`${serviceName}-service`);
+const server = createServer(config, serviceLogger);
 
-console.log(`starting on port: [${process.env.API_SERVER_PORT}]`);
-
-// TODO: Validate parameters and throw error
-
-const express = require('express');
-const app = express();
-
-app.get('/', function (req, res) {
-  res.send('Hello World');
+process.on('unhandledRejection', (e) => {
+  serviceLogger.error(`Unhandled promise rejection in [${config.serviceName}] service.`, e);
 });
 
-app.listen(process.env.API_SERVER_PORT);
+process.on('uncaughtException', (e) => {
+  serviceLogger.error(`Uncaught exception in [${config.serviceName}] service.`, e);
+});
 
-console.log(`server started on port: [${process.env.API_SERVER_PORT}]`);
+function handleTerminationSignal(signal: string) {
+  console.log(`Received [${signal}] signal.`);
+
+  handleGracefulShutdown();
+}
+
+function handleGracefulShutdown() {
+  server.close(function onServerClosed(e) {
+    serviceLogger.info(`Terminate [${config.serviceName}] service.`);
+
+    if (e) {
+      serviceLogger.error(
+        `Service [${config.serviceName}] termination failed. Force process exit. Error:`,
+        e
+      );
+      process.exit(1);
+    }
+    serviceLogger.info(`Terminated [${config.serviceName}] service.`);
+    process.exit(0);
+  });
+}
+
+// setup termination handlers for a list of signals
+const signals = [
+  'SIGABRT',
+  'SIGBUS',
+  'SIGFPE',
+  'SIGHUP',
+  'SIGILL',
+  'SIGINT',
+  'SIGQUIT',
+  'SIGSEGV',
+  'SIGTERM',
+  'SIGTRAP',
+  'SIGUSR1',
+  'SIGUSR2',
+];
+
+for (const signal of signals) {
+  process.on(signal, handleTerminationSignal);
+}
