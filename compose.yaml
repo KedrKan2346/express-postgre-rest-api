@@ -5,15 +5,20 @@ services:
     build:
       dockerfile: Dockerfile
     environment:
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db
+      DB_USER_NAME: ${DB_USER_NAME}
+      DB_USER_PASSWORD: ${DB_USER_PASSWORD}
       DB_NAME: ${DB_NAME}
       API_SERVER_PORT: ${API_SERVER_PORT}
       API_VERSION: ${API_VERSION}
     ports:
       - ${API_SERVER_PORT}:${API_SERVER_PORT}
+    networks:
+      - private
     depends_on:
-      - db
+      db:
+        condition: service_started
+    command: npm run init
 
   db:
     image: postgres:latest
@@ -21,11 +26,16 @@ services:
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER_NAME}
+      POSTGRES_PASSWORD: ${DB_USER_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres:/var/lib/postgresql/data
+    networks:
+      - private
 
 volumes:
   postgres:
+
+networks:
+  private:

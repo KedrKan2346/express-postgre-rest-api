@@ -1,7 +1,7 @@
 function run() {
   console.log('Executed index file:');
   console.log(
-    `db name: [${process.env.DB_NAME}]; db user: [${process.env.DB_USER}]; db name: [${process.env.DB_PASSWORD}];`
+    `db name: [${process.env.DB_NAME}]; db user: [${process.env.DB_USER_NAME}]; db name: [${process.env.DB_USER_PASSWORD}];`
   );
 }
 

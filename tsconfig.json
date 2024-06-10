@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "lib": ["ES2022", "DOM"]
+    "lib": ["ES2022", "DOM"],
+    "paths": {
+      "@core/*": ["./src/core/*"],
+      "@migrations/*": ["./src/migrations/*"]
+    }
   },
-  "include": ["./src/*", "./src/**/*"]
+  "include": ["src/**/*"]
 }

@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "init": "node --import tsx ./src/scripts/init-db",
+    "init:dev": "dotenv -- node --import tsx ./src/scripts/init-db",
     "build": "tsc",
     "start": "node ./dist/index",
     "prettier": "prettier --write ."
@@ -16,10 +18,15 @@
     "node": ">=20.11.0"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "tsx": "^4.15.1",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.2",
+    "@types/pg": "^8.11.6",
+    "dotenv-cli": "^7.4.2",
     "prettier": "^3.3.1",
     "typescript": "^5.4.5"
   },
