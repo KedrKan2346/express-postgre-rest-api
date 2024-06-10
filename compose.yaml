@@ -18,7 +18,6 @@ services:
     depends_on:
       db:
         condition: service_started
-    command: npm run init
 
   db:
     image: postgres:latest
