@@ -3,6 +3,8 @@
     "outDir": "./dist",
     "lib": ["ES2022", "DOM"],
     "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "paths": {
       "@core/*": ["./src/core/*"],
       "@migrations/*": ["./src/migrations/*"],

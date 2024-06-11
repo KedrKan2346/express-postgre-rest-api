@@ -36,10 +36,10 @@ async function createSprocketProductionSnapshotTable(pgPool: Pool, logger: Logge
   }
 }
 
-async function createSprocketTypeTable(pgPool: Pool, logger: Logger): Promise<void> {
-  const tableName = 'sprocket_type';
-  const tableIndexName = 'idx_sprocket_type_id';
-  const tableFactoryIdIndexName = 'idx_sprocket_type_factory_id';
+async function createSprocketTable(pgPool: Pool, logger: Logger): Promise<void> {
+  const tableName = 'sprocket';
+  const tableIndexName = 'idx_sprocket_id';
+  const tableFactoryIdIndexName = 'idx_sprocket_factory_id';
   logger.info('Connecting to database...');
   let poolClient = null;
 
@@ -50,7 +50,7 @@ async function createSprocketTypeTable(pgPool: Pool, logger: Logger): Promise<vo
 
     await poolClient.query(`
           CREATE TABLE IF NOT EXISTS ${tableName} (
-            id uuid NOT NULL,
+            id uuid NOT NULL DEFAULT uuid_generate_v4(),
             factory_id uuid NOT NULL,
             teeth smallint NOT NULL,
             pitch_diameter smallint NOT NULL,
@@ -115,6 +115,6 @@ async function createFactoryTable(pgPool: Pool, logger: Logger): Promise<void> {
 
 export async function createDnSchema(pgPool: Pool, logger: Logger) {
   await createSprocketProductionSnapshotTable(pgPool, logger);
-  await createSprocketTypeTable(pgPool, logger);
+  await createSprocketTable(pgPool, logger);
   await createFactoryTable(pgPool, logger);
 }

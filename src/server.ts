@@ -8,9 +8,11 @@ import { initSprocketRouters } from '@features/sprocket/index';
 export function createServer(config: ServiceConfiguration, logger: Logger, dataSource: DataSource): Server {
   const app = express();
 
+  app.use(express.json());
+
   // Mount routes from features
   const router = Router();
-  router.use(initSprocketRouters());
+  router.use(initSprocketRouters(dataSource, logger));
 
   // Add api version prefix
   app.use(`/${config.apiVersion}`, router);

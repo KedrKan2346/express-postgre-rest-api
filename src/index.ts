@@ -3,7 +3,7 @@ import { Server } from 'http';
 import { createServer } from './server';
 import { createLogger } from '@core/logger';
 import { getServiceConfiguration } from '@core/config';
-import { PersistenceClient } from '@core/persistence-client';
+import { TypeOrmPersistenceClient } from '@core/type-orm-persistence-client';
 
 let server: Server | null = null;
 let dataSource: DataSource | null = null;
@@ -13,7 +13,7 @@ const serviceLogger = createLogger(`${serviceName}-service`);
 
 serviceLogger.info(`Starting [${config.serviceName}] server on port: [${config.apiServerPort}]`);
 
-const persistenceClient = new PersistenceClient(
+const persistenceClient = new TypeOrmPersistenceClient(
   {
     dbHost: config.dbHost,
     dbName: config.dbName,
@@ -37,10 +37,12 @@ persistenceClient
 
 process.on('unhandledRejection', (e) => {
   serviceLogger.error(`Unhandled promise rejection in [${config.serviceName}] service.`, e);
+  process.exit(1);
 });
 
 process.on('uncaughtException', (e) => {
   serviceLogger.error(`Uncaught exception in [${config.serviceName}] service.`, e);
+  process.exit(1);
 });
 
 function handleTerminationSignal(signal: string) {
@@ -65,9 +67,11 @@ function handleGracefulShutdown() {
         `Service [${config.serviceName}] termination failed. Force process exit. Error:`,
         e
       );
+      server = null;
       process.exit(1);
     }
     serviceLogger.info(`Terminated [${config.serviceName}] service.`);
+    server = null;
     process.exit(0);
   });
 }

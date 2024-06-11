@@ -1,0 +1,1 @@
+Infrastructure folder contains framework | lib | database type  | data source | connection and other implementation specific code what can be changed without affecting business logic (i.e. use cases, domain model)
