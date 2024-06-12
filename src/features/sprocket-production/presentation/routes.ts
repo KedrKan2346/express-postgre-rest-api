@@ -37,7 +37,7 @@ export function initSprocketProductionRouters(dataSource: DataSource, logger: Lo
     sprocketProductionController.getAllPagedByFactoryId
   );
 
-  sprocketProductionMainRouter.use('/sprocket-production', sprocketProductionRouters);
+  sprocketProductionMainRouter.use('/sprocket-productions', sprocketProductionRouters);
 
   return sprocketProductionMainRouter;
 }
