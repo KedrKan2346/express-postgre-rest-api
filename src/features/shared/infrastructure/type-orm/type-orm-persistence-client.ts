@@ -1,3 +1,4 @@
+import { TypeOrmSprocketProductionPersistence } from '@features/sprocket-production/infrastructure';
 import { TypeOrmSprocketPersistence } from '@features/sprocket/infrastructure';
 import { DataSource } from 'typeorm';
 import { Logger } from 'winston';
@@ -28,7 +29,7 @@ export class TypeOrmPersistenceClient {
       // by initializing feature at route level. Importing TypeOrm entity definition does not look perfect
       // but it is not super bad because this client class is also library specific infrastructure.
       // The entities array is required to extract metadata information. Otherwise getting "No Metadata found..." error.
-      entities: [TypeOrmSprocketPersistence],
+      entities: [TypeOrmSprocketPersistence, TypeOrmSprocketProductionPersistence],
     });
     return dataSource.initialize();
   }

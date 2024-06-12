@@ -5,7 +5,8 @@ import { Server } from 'http';
 import { StatusCodes } from 'http-status-codes';
 import { ServiceConfiguration } from '@core/config';
 import { formatErrorResponse } from '@core/format-response';
-import { initSprocketRouters } from '@features/sprocket/index';
+import { initSprocketRouters } from '@features/sprocket';
+import { initSprocketProductionRouters } from '@features/sprocket-production';
 
 // TechDebt: Express does not handle async errors properly so we can apply this patch or implement global
 // async higher order function runner and wrap all controllers. Adding this patch as temporary solution which
@@ -36,6 +37,7 @@ export function createServer(config: ServiceConfiguration, logger: Logger, dataS
   // Mount routes from features
   const router = Router();
   router.use(initSprocketRouters(dataSource, logger));
+  router.use(initSprocketProductionRouters(dataSource, logger));
 
   // Add api version prefix
   app.use(`/${config.apiVersion}`, router);

@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
 import { Logger } from 'winston';
-import { SprocketUseCases } from '../domain/use-cases';
 import { NotFoundError } from '@core/errors';
 import { formatResultResponse } from '@core/format-response';
-import { tryGetNumericValue } from '@core/utils';
+import { getPageQueryParams } from '@features/shared/presentation/controllers';
+import { SprocketUseCases } from '../domain/use-cases';
 
 // NOTE: Using arrow functions for context binding simplicity.
 export class SprocketController {
@@ -13,13 +13,10 @@ export class SprocketController {
   ) {}
 
   getAllPaged: RequestHandler = async (req, res) => {
-    // Return 50 sprockets by default.
-    const take = tryGetNumericValue(req.query.take) ?? 50;
-    // Returns the first page by default.
-    const skip = tryGetNumericValue(req.query.skip) ?? 0;
-    // Fulfil use case which retrieves page of data
+    const { take, skip } = getPageQueryParams(req);
+
     const sprockets = await this.useCases.getAllPaged(take, skip);
-    // Format and send http response
+
     res.send(
       formatResultResponse(sprockets, 'sprockets', 'query', {
         details: { take, skip, count: sprockets.length },

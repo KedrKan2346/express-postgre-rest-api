@@ -3,7 +3,7 @@ import { Server } from 'http';
 import { createServer } from './server';
 import { createLogger } from '@core/logger';
 import { getServiceConfiguration } from '@core/config';
-import { TypeOrmPersistenceClient } from '@core/type-orm-persistence-client';
+import { TypeOrmPersistenceClient } from '@features/shared/infrastructure';
 
 let server: Server | null = null;
 let dataSource: DataSource | null = null;
@@ -32,7 +32,10 @@ persistenceClient
     server = createServer(config, serviceLogger, dataSource);
   })
   .catch((err) => {
-    serviceLogger.error(`Data source initialization for [${config.serviceName}] service failed.`);
+    serviceLogger.error(
+      `Data source initialization for [${config.serviceName}] service failed. Error: `,
+      err
+    );
   });
 
 process.on('unhandledRejection', (e) => {

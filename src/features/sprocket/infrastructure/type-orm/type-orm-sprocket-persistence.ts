@@ -1,5 +1,5 @@
 import { Column, PrimaryColumn, Entity } from 'typeorm';
-import { TypeOrmBaseEntity } from './type-orm-base-entity';
+import { TypeOrmBaseEntity } from '@features/shared/infrastructure';
 
 @Entity('sprocket')
 export class TypeOrmSprocketPersistence extends TypeOrmBaseEntity {

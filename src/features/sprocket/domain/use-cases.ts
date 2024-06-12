@@ -1,4 +1,3 @@
-import { DataSource } from 'typeorm';
 import { Logger } from 'winston';
 import { CreateOrUpdateSprocketRequestDto, SprocketDto } from './dto';
 import { SprocketPersistence } from './persistence';
