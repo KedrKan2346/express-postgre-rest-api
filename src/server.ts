@@ -3,6 +3,7 @@ import { Logger } from 'winston';
 import { DataSource } from 'typeorm';
 import { Server } from 'http';
 import { ServiceConfiguration } from '@core/config';
+import { formatErrorResponse } from '@core/format-response';
 import { initSprocketRouters } from '@features/sprocket/index';
 
 // TechDebt: Express does not handle async errors properly so we can apply this patch or implement global
@@ -12,18 +13,16 @@ import 'express-async-errors';
 
 export function createServer(config: ServiceConfiguration, logger: Logger, dataSource: DataSource): Server {
   function handleError(err: Error, req, res, next) {
-    logger.info(JSON.stringify(err));
-
     if (err.name === 'ValidationError') {
       res.status(400);
-      res.json({ error: err.message, status: 400 });
+      res.json(formatErrorResponse(400, err.message));
     } else if (err.name === 'NotFoundError') {
       res.status(404);
-      res.json({ error: err.message, status: 404 });
+      res.json(formatErrorResponse(404, err.message));
     } else {
       logger.error('Unexpected server error: ', err);
       res.status(500);
-      res.json({ error: 'Unexpected server error.', status: 500 });
+      res.json(formatErrorResponse(500, 'Unexpected server error.'));
     }
 
     next(err);
