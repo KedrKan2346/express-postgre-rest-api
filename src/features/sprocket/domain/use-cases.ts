@@ -10,8 +10,8 @@ export class SprocketUseCases {
     private readonly logger: Logger
   ) {}
 
-  async getAllPaged(): Promise<SprocketDto[]> {
-    return this.persistenceService.getAllPaged();
+  async getAllPaged(take: number, skip: number): Promise<SprocketDto[]> {
+    return this.persistenceService.getAllPaged(take, skip);
   }
 
   async create(

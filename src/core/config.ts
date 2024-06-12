@@ -1,3 +1,5 @@
+import { tryGetNumericValue } from './utils';
+
 function getEnvValueOrThrow(envParamName: string): string {
   const envValue = process.env[envParamName];
 
@@ -10,20 +12,6 @@ function getEnvValueOrThrow(envParamName: string): string {
 
 function getEnvValue(envParamName: string): string {
   return process.env[envParamName];
-}
-
-// TechDebt: Move this function in shared space.
-function isNumeric(value: any): boolean {
-  return !isNaN(parseFloat(value)) && isFinite(value);
-}
-
-// TechDebt: Move this function in shared space.
-function tryGetNumericValue(value: any): number | undefined {
-  try {
-    return isNumeric(value) ? value : undefined;
-  } catch {
-    return;
-  }
 }
 
 export interface ServiceConfiguration {

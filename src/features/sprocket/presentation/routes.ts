@@ -4,6 +4,12 @@ import { DataSource } from 'typeorm';
 import { SprocketController } from './controller';
 import { SprocketUseCases } from '../domain/use-cases';
 import { TypeOrmSprocketPersistenceService } from '../infrastructure';
+import { sprocketCreateOrUpdateDtoSchema } from './validators';
+import {
+  createParamsValidator,
+  createRequestBodyValidator,
+  paramIdPathSchema,
+} from '@features/shared/presentation/validators';
 
 export function initSprocketRouters(dataSource: DataSource, logger: Logger) {
   const sprocketMainRouter = Router();
@@ -14,11 +20,20 @@ export function initSprocketRouters(dataSource: DataSource, logger: Logger) {
 
   sprocketRouters.get('/', sprocketController.getAllPaged);
 
-  sprocketRouters.get('/:id', sprocketController.findById);
+  sprocketRouters.get('/:id', createParamsValidator(paramIdPathSchema), sprocketController.findById);
 
-  sprocketRouters.post('/', sprocketController.create);
+  sprocketRouters.post(
+    '/',
+    createRequestBodyValidator(sprocketCreateOrUpdateDtoSchema),
+    sprocketController.create
+  );
 
-  sprocketRouters.put('/:id', sprocketController.updateById);
+  sprocketRouters.put(
+    '/:id',
+    createParamsValidator(paramIdPathSchema),
+    createRequestBodyValidator(sprocketCreateOrUpdateDtoSchema),
+    sprocketController.updateById
+  );
 
   sprocketMainRouter.use('/sprockets', sprocketRouters);
 

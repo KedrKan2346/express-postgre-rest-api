@@ -2,6 +2,7 @@ import express, { Express, Router } from 'express';
 import { Logger } from 'winston';
 import { DataSource } from 'typeorm';
 import { Server } from 'http';
+import { StatusCodes } from 'http-status-codes';
 import { ServiceConfiguration } from '@core/config';
 import { formatErrorResponse } from '@core/format-response';
 import { initSprocketRouters } from '@features/sprocket/index';
@@ -14,15 +15,15 @@ import 'express-async-errors';
 export function createServer(config: ServiceConfiguration, logger: Logger, dataSource: DataSource): Server {
   function handleError(err: Error, req, res, next) {
     if (err.name === 'ValidationError') {
-      res.status(400);
-      res.json(formatErrorResponse(400, err.message));
+      res.status(StatusCodes.BAD_REQUEST);
+      res.json(formatErrorResponse(StatusCodes.BAD_REQUEST, [err.message]));
     } else if (err.name === 'NotFoundError') {
-      res.status(404);
-      res.json(formatErrorResponse(404, err.message));
+      res.status(StatusCodes.NOT_FOUND);
+      res.json(formatErrorResponse(StatusCodes.NOT_FOUND, [err.message]));
     } else {
       logger.error('Unexpected server error: ', err);
-      res.status(500);
-      res.json(formatErrorResponse(500, 'Unexpected server error.'));
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      res.json(formatErrorResponse(StatusCodes.INTERNAL_SERVER_ERROR, ['Unexpected server error.']));
     }
 
     next(err);

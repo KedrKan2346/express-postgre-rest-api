@@ -14,8 +14,8 @@ export class TypeOrmSprocketPersistenceService implements SprocketPersistence {
     this.repository = this.dataSource.getRepository(TypeOrmSprocketPersistence);
   }
 
-  async getAllPaged(): Promise<SprocketDto[]> {
-    return this.repository.find();
+  async getAllPaged(take: number, skip: number): Promise<SprocketDto[]> {
+    return this.repository.find({ take, skip });
   }
 
   async create(

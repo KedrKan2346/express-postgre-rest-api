@@ -1,7 +1,7 @@
 import { CreateOrUpdateSprocketRequestDto, SprocketDto } from './dto';
 
 export interface SprocketPersistence {
-  getAllPaged: () => Promise<SprocketDto[]>;
+  getAllPaged: (take: number, skip: number) => Promise<SprocketDto[]>;
 
   create: (
     dto: CreateOrUpdateSprocketRequestDto
