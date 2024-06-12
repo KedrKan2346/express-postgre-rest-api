@@ -26,7 +26,7 @@ export class TypeOrmSprocketPersistenceService implements SprocketPersistence {
     return insertedEntity.raw;
   }
 
-  async findById(id: string): Promise<SprocketDto> {
+  async findById(id: string): Promise<SprocketDto | null> {
     return this.repository.findOneBy({ id });
   }
 

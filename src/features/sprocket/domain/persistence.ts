@@ -7,7 +7,7 @@ export interface SprocketPersistence {
     dto: CreateOrUpdateSprocketRequestDto
   ) => Promise<Pick<SprocketDto, 'id' | 'createdAt' | 'updatedAt'>>;
 
-  findById: (id: string) => Promise<SprocketDto>;
+  findById: (id: string) => Promise<SprocketDto | null>;
 
   updateById: (id: string, dto: CreateOrUpdateSprocketRequestDto) => Promise<number>;
 }

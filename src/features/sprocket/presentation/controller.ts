@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { Logger } from 'winston';
 import { SprocketUseCases } from '../domain/use-cases';
+import { NotFoundError } from '@core/errors';
 
 // NOTE: Using arrow functions for context binding simplicity.
 export class SprocketController {
@@ -21,13 +22,23 @@ export class SprocketController {
 
   findById: RequestHandler = async (req, res) => {
     const id = req.params['id'];
-    const newSprocket = await this.useCases.findById(id);
-    res.send(newSprocket);
+    const sprocket = await this.useCases.findById(id);
+
+    if (!sprocket) {
+      throw new NotFoundError('Resource not found.');
+    }
+
+    res.send(sprocket);
   };
 
   updateById: RequestHandler = async (req, res) => {
     const id = req.params['id'];
     const recordsAffected = await this.useCases.updateById(id, req.body);
+
+    if (!recordsAffected) {
+      throw new NotFoundError('Resource not found.');
+    }
+
     res.send({ recordsAffected });
   };
 }

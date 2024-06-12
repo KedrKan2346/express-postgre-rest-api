@@ -18,11 +18,14 @@ export class SprocketUseCases {
     dto: CreateOrUpdateSprocketRequestDto
   ): Promise<Pick<SprocketDto, 'id' | 'createdAt' | 'updatedAt'>> {
     const domainEntity = new SprocketDomainEntity(dto, this.logger);
+
+    // Using domain model in use case
     domainEntity.validateDiameters();
+
     return this.persistenceService.create(domainEntity.toDto());
   }
 
-  async findById(id: string): Promise<SprocketDto> {
+  async findById(id: string): Promise<SprocketDto | null> {
     return this.persistenceService.findById(id);
   }
 
