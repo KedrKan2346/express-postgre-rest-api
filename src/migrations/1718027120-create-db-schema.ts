@@ -2,6 +2,10 @@ import { Pool } from 'pg';
 import { Logger } from 'winston';
 import sprocketProductionJson from './seed/seed_factory_data.json';
 
+/**
+ * This script creates database schema and loads sprocket production data.
+ */
+
 async function createSprocketProductionSnapshotTable(pgPool: Pool, logger: Logger): Promise<void> {
   const tableName = 'sprocket_production_snapshot';
   const tableFactoryIdIndexName = 'idx_sprocket_production_snapshot_factory_id';

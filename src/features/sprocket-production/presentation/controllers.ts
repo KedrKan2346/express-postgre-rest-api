@@ -6,12 +6,21 @@ import { formatResultResponse } from '@core/format-response';
 import { getPageQueryParams } from '@features/shared/presentation/controllers';
 
 // NOTE: Using arrow functions for context binding simplicity.
+
+/**
+ * Controllers receive HTTP requests, execute use cases, format and send back responses.
+ */
 export class SprocketProductionController {
   constructor(
     private readonly useCases: SprocketProductionUseCases,
     private readonly logger: Logger
   ) {}
 
+  /**
+   * Get paginated sprocket production data.
+   * @param req HTTP request.
+   * @param res HTTP response.
+   */
   getAllPaged: RequestHandler = async (req, res) => {
     const { take, skip } = getPageQueryParams(req);
 
@@ -24,6 +33,11 @@ export class SprocketProductionController {
     );
   };
 
+  /**
+   * Get paginated sprocket production data filtered by factory id.
+   * @param req HTTP request.
+   * @param res HTTP response.
+   */
   getAllPagedByFactoryId: RequestHandler = async (req, res) => {
     const factoryId = req.params['factory_id'];
     const { take, skip } = getPageQueryParams(req);

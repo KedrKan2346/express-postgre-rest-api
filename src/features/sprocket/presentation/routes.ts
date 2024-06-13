@@ -13,6 +13,16 @@ import {
   createParamIdPathSchema,
 } from '@features/shared/presentation/validators';
 
+/**
+ * Routes are main entry point of a feature (business entity) where all classes are initialized.
+ */
+
+/**
+ * Initialize HTTP endpoint paths, persistence, and controllers.
+ * @param dataSource Initialized and connected to database TypeORM data source.
+ * @param logger Service logger.
+ * @returns undefined.
+ */
 export function initSprocketRouters(dataSource: DataSource, logger: Logger) {
   const sprocketMainRouter = Router();
   const sprocketRouters = Router();

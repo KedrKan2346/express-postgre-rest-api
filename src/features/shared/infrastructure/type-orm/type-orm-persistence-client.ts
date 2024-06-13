@@ -11,12 +11,19 @@ interface PersistenceClientConfig {
   dbPort: number;
 }
 
+/**
+ * TypeORM persistence client which initializes (connects to database) and destroys data source.
+ */
 export class TypeOrmPersistenceClient {
   constructor(
     private readonly config: PersistenceClientConfig,
     private readonly logger: Logger
   ) {}
 
+  /**
+   * Initialize data source and connect to database.
+   * @returns Initialized data source.
+   */
   async initializeDataSource(): Promise<DataSource> {
     const dataSource = new DataSource({
       type: 'postgres',
@@ -34,6 +41,10 @@ export class TypeOrmPersistenceClient {
     return dataSource.initialize();
   }
 
+  /**
+   * Disconnect from database, close connections, and release data source resources.
+   * @param dataSource Data source to destroy.
+   */
   async destroyDataSource(dataSource: DataSource | null): Promise<void> {
     this.logger.info('Destroying data source.');
 

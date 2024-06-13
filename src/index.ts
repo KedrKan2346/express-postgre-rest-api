@@ -5,6 +5,10 @@ import { createLogger } from '@core/logger';
 import { getServiceConfiguration } from '@core/config';
 import { TypeOrmPersistenceClient } from '@features/shared/infrastructure';
 
+/**
+ * Main entry point of the service.
+ */
+
 let server: Server | null = null;
 let dataSource: DataSource | null = null;
 const config = getServiceConfiguration();
@@ -13,6 +17,7 @@ const serviceLogger = createLogger(`${serviceName}-service`);
 
 serviceLogger.info(`Starting [${config.serviceName}] server on port: [${config.apiServerPort}]`);
 
+// Initialize TypeORM-based persistence client in the main service entry point.
 const persistenceClient = new TypeOrmPersistenceClient(
   {
     dbHost: config.dbHost,
@@ -54,14 +59,20 @@ function handleTerminationSignal(signal: string) {
   handleGracefulShutdown();
 }
 
+/**
+ * Destroy resources gracefully.
+ * @returns undefined
+ */
 function handleGracefulShutdown() {
   if (!server) {
     return;
   }
 
+  // Close server and destroy all resources.
   server.close(async function onServerClosed(e) {
     serviceLogger.info(`Terminate [${config.serviceName}] service.`);
 
+    // Destroy connections and utilize resources gracefully when server is stopped.
     await persistenceClient.destroyDataSource(dataSource);
     dataSource = null;
 
@@ -79,7 +90,6 @@ function handleGracefulShutdown() {
   });
 }
 
-// setup termination handlers for a list of signals
 const signals = [
   'SIGABRT',
   'SIGBUS',
@@ -95,6 +105,7 @@ const signals = [
   'SIGUSR2',
 ];
 
+// setup termination handlers for a list of signals
 for (const signal of signals) {
   process.on(signal, handleTerminationSignal);
 }

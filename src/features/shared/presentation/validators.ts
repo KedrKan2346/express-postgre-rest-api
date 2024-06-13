@@ -4,6 +4,11 @@ import { StatusCodes } from 'http-status-codes';
 import { formatErrorResponse } from '@core/format-response';
 import { tryGetNumericValue } from '@core/utils';
 
+/**
+ * Handle validation errors thrown by validators like Zod and Joi.
+ * @param error Error.
+ * @param res HTTP response.
+ */
 function handleValidationError(error: any, res: Response) {
   if (error instanceof ZodError) {
     const errorMessages = error.errors.map((issue: any) => {
@@ -16,12 +21,21 @@ function handleValidationError(error: any, res: Response) {
   }
 }
 
+/**
+ * Create "id" path parameter which can have any name.
+ * @param idParameterName Path parameter name.
+ * @returns Path parameter validation schema.
+ */
 export function createParamIdPathSchema(idParameterName: string) {
   return z.object({
     [idParameterName]: z.string().uuid(),
   });
 }
 
+/**
+ * Paging query parameters validation schema. Makes sure "take" query parameter is not greater than 1000
+ * to prevent database server overload and OOM errors.
+ */
 export const pageQueryParamsSchema = z.object({
   take: z
     .string()
@@ -38,6 +52,11 @@ export const pageQueryParamsSchema = z.object({
     ),
 });
 
+/**
+ * Create HTTP request body validator.
+ * @param schema Validation schema.
+ * @returns HTTP request body validator with provided validation schema.
+ */
 export function createRequestBodyValidator(schema: z.ZodObject<any, any>) {
   return function validateRequestBody(req: Request, res: Response, next: NextFunction) {
     try {
@@ -49,6 +68,11 @@ export function createRequestBodyValidator(schema: z.ZodObject<any, any>) {
   };
 }
 
+/**
+ * Create path parameters validator.
+ * @param schema Validation schema.
+ * @returns Path parameters validator with provided validation schema.
+ */
 export function createPathParamsValidator(schema: z.ZodObject<any, any>) {
   return function validatePathParams(req: Request, res: Response, next: NextFunction) {
     try {
@@ -60,6 +84,11 @@ export function createPathParamsValidator(schema: z.ZodObject<any, any>) {
   };
 }
 
+/**
+ * Create query parameters validator.
+ * @param schema Validation schema.
+ * @returns Query parameters validator with provided validation schema.
+ */
 export function createQueryParamsValidator(schema: z.ZodObject<any, any>) {
   return function validateQueryParams(req: Request, res: Response, next: NextFunction) {
     try {

@@ -1,3 +1,6 @@
+/**
+ * Bad request error which is usually returned when request payload is not valid. HTTP status code 400.
+ */
 export class BadRequest extends Error {
   constructor(message?: string) {
     super(message || 'Bad Request');
@@ -5,6 +8,10 @@ export class BadRequest extends Error {
     Object.setPrototypeOf(this, BadRequest.prototype);
   }
 }
+
+/**
+ * Validation error which is usually returned when some conditions are not met in any level of the application code. HTTP status code 400.
+ */
 
 export class ValidationError extends Error {
   constructor(message: string) {
@@ -14,6 +21,9 @@ export class ValidationError extends Error {
   }
 }
 
+/**
+ * Resource not found. HTTP status code 400.
+ */
 export class NotFoundError extends Error {
   constructor(message: string) {
     super(message);

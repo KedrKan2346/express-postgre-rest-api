@@ -13,6 +13,14 @@ import { initSprocketProductionRouters } from '@features/sprocket-production';
 // can be removed when stable Express 5 is released.
 import 'express-async-errors';
 
+/**
+ * Create and start express server.
+ * @param config Service parameters which are passed via process env variables.
+ * @param logger Service logger.
+ * @param dataSource TypeORM data source to be passed down to the routes. Data source is initialized at root level of the service
+ * in order to close connections and destroy pool gracefully if server is stopped (graceful shutdown).
+ * @returns Server running on a port defined in process env variable.
+ */
 export function createServer(config: ServiceConfiguration, logger: Logger, dataSource: DataSource): Server {
   function handleError(err: Error, req, res, next) {
     if (err.name === 'ValidationError') {
@@ -34,17 +42,17 @@ export function createServer(config: ServiceConfiguration, logger: Logger, dataS
 
   app.use(express.json());
 
-  // Mount routes from features
+  // Mount routes from features.
   const router = Router();
   router.use(initSprocketRouters(dataSource, logger));
   router.use(initSprocketProductionRouters(dataSource, logger));
 
-  // Add api version prefix
+  // Add api version prefix.
   app.use(`/${config.apiVersion}`, router);
 
   app.use(handleError);
 
-  // Start server
+  // Start server.
   const server = app.listen(process.env.API_SERVER_PORT);
 
   logger.info(

@@ -2,6 +2,9 @@ import { Logger } from 'winston';
 import { SprocketDto } from './dto';
 import { ValidationError } from '@core/errors';
 
+/**
+ * Sprocket domain model which contains business logic.
+ */
 export class SprocketDomainEntity {
   constructor(
     private readonly dto: SprocketDto,

@@ -1,6 +1,9 @@
 import { Column, PrimaryColumn, Entity } from 'typeorm';
 import { TypeOrmBaseEntity } from '@features/shared/infrastructure';
 
+/**
+ * Sprocket persistence entity which describes metadata for TypeORM framework.
+ */
 @Entity('sprocket')
 export class TypeOrmSprocketPersistence extends TypeOrmBaseEntity {
   @PrimaryColumn({ type: 'uuid', name: 'factory_id', nullable: false })

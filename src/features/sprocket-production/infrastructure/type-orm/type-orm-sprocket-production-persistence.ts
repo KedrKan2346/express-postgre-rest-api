@@ -1,5 +1,8 @@
 import { ViewEntity, ViewColumn } from 'typeorm';
 
+/**
+ * Factory sprocket production persistent entity which is similar to "Materialized View" concept.
+ */
 @ViewEntity('sprocket_production_snapshot')
 export class TypeOrmSprocketProductionPersistence {
   @ViewColumn({ name: 'factory_id' })

@@ -1,5 +1,10 @@
 import { tryGetNumericValue } from './utils';
 
+/**
+ * Get required process env value and throws exception if value does not exist.
+ * @param envParamName Env parameter name.
+ * @returns Env parameter value.
+ */
 function getEnvValueOrThrow(envParamName: string): string {
   const envValue = process.env[envParamName];
 
@@ -10,10 +15,18 @@ function getEnvValueOrThrow(envParamName: string): string {
   return envValue;
 }
 
+/**
+ * Get process env value which may not exist.
+ * @param envParamName Env parameter name.
+ * @returns Env parameter value.
+ */
 function getEnvValue(envParamName: string): string {
   return process.env[envParamName];
 }
 
+/**
+ * Declaration of service parameters which are passed via process env variables.
+ */
 export interface ServiceConfiguration {
   dbHost: string;
   dbName: string;
@@ -25,6 +38,10 @@ export interface ServiceConfiguration {
   serviceName: string;
 }
 
+/**
+ * Get service parameters which are passed via process env variables.
+ * @returns Service parameters which are passed via process env variables.
+ */
 export function getServiceConfiguration(): ServiceConfiguration {
   return {
     dbHost: getEnvValue('DB_HOST'),
