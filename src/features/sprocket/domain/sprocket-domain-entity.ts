@@ -11,6 +11,10 @@ export class SprocketDomainEntity {
     private readonly logger: Logger
   ) {}
 
+  /**
+   * Validate sprocket diameters. Throws validation error if validation fails.
+   * @returns true if pitch diameter is greater than outside diameter.
+   */
   validateDiameters(): boolean {
     if (this.dto.pitchDiameter > this.dto.outsideDiameter) {
       throw new ValidationError('Outside diameter should be greater than pitch diameter');
